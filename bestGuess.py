@@ -2,6 +2,7 @@ from collections import Counter
 
 # Scoring Function
 # Takes in a list of dictionarys with corresponding scores by letter position
+# TODO: Count only the max letter score per letter
 def wordScore (word, freq) -> int:
     score = 0
     for letter in word:
@@ -16,11 +17,14 @@ def letterScore(wordList):
   for i in range(1,5):
     scores.append(nthLetterOfWords(i, wordList))
   return scores
-  
+
+#TODO
 def possibleWords(wordList):
   return wordList
 
 # 1 based
+  
+#Frequency of letters based on position
 def nthLetterOfWords(n, wordList):
   letters = ""
   for word in wordList:
