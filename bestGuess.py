@@ -2,22 +2,42 @@ from collections import Counter
 
 # Scoring Function
 # Takes in a list of dictionarys with corresponding scores by letter position
-# TODO: Count only the max letter score per letter
 def wordScore (word, freq) -> int:
     score = 0
-    for letter in word:
-      for i in range(0,4):
-        score += freq[i][letter]
+    for letter in set(word):
+      letterOccurances = positionsOfChar(letter, word)
+      letterScores = maxLetterScoreRanked(letter, freq)
+      for letterIndex in letterScores.keys():
+        if letterIndex in letterOccurances:
+          score += letterScores[letterIndex]
+          break
     return score
 
+# Given a word and a Character, returns a list of its indexes
+def positionsOfChar(c, word):
+  ret = []
+  for i in range(len(word)):
+    if(word[i] == c): 
+      ret.append(i)
+  return ret
+  
 # Letter Scoring Function
 # Returns a list of dictionarys with letter scores by poition
 def letterScore(wordList):
   scores = []
-  for i in range(1,5):
+  for i in range(1,6):
     scores.append(nthLetterOfWords(i, wordList))
   return scores
 
+# Returns dict of index : score, sorted in desc order by score
+def maxLetterScoreRanked(letter, freq):
+  res = {}
+  for i in range(5):
+    if letter in freq[i]:
+      res[i]= freq[i][letter]
+  return dict(sorted(res.items(),key=lambda item:item[1], reverse=True))
+  
+  
 #TODO
 def possibleWords(wordList):
   return wordList
@@ -121,7 +141,7 @@ def bestGuess(goodLetters, badLetters):
     res = dict(sorted(res.items(),key=lambda item:item[1], reverse=True))
     for key in res:
         print(f'{key} - Score: {res[key]}')
-bestGuess("","")
+bestGuess("e","rats")
 wordList = {"added", 
             "agent", 
             "alpha", 
@@ -181,4 +201,6 @@ wordList = {"added",
             "vests", 
             "yield"}
 
+#print(wordScore("sssss", letterScore(wordList)))
 #print(letterScore(wordList))
+
