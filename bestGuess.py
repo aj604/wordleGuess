@@ -25,7 +25,7 @@ def positionsOfChar(c, word):
 # Returns a list of dictionarys with letter scores by poition
 def letterScore(wordList):
   scores = []
-  for i in range(1,6):
+  for i in range(5):
     scores.append(nthLetterOfWords(i, wordList))
   return scores
 
@@ -86,12 +86,12 @@ def wordsWithLetterInPosition(letter, position, wordList):
       ret.append(word)
   return ret
   
-# 1 based
+
 #Frequency of letters based on position
 def nthLetterOfWords(n, wordList):
   letters = ""
   for word in wordList:
-    letters += word[n-1]
+    letters += word[n]
   return Counter(letters)
   
 
@@ -175,11 +175,9 @@ def bestGuess(positionLetters, requiredLetters, excludedLetters):
     res = {}
     for i in wordList:
       res[i] = wordScore(i,scores)
-      
+
+    # Sort results by descending scores
     res = dict(sorted(res.items(),key=lambda item:item[1], reverse=True))
-    
-    #for key in res:
-        #print(f'{key} - Score: {res[key]}')
   
     return res
 
