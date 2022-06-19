@@ -38,12 +38,55 @@ def maxLetterScoreRanked(letter, freq):
   return dict(sorted(res.items(),key=lambda item:item[1], reverse=True))
   
   
-#TODO
-def possibleWords(wordList):
-  return wordList
+# Pre: Letters with required position, required letters, and excluded letters
+# Post: Possible words
+# Dont forget the case where position letters can occur multiple times
+def possibleWords(positionLetters, requiredLetters, excludedLetters, wordList):
 
-# 1 based
+  # Position Letter Loop
+  for i in range(5):
+    if positionLetters[i] != ' ':
+      wordList = wordsWithLetterInPosition(positionLetters[i], i, wordList)
+
+  # Required Letter Loop
+  for letter in requiredLetters:
+    wordList = wordsWithLetter(letter, wordList)
+
+  # Excluded Letter Loop
+  for letter in excludedLetters:
+    wordList = wordsWithoutLetter(letter, wordList)
   
+  return wordList
+# Given a letter and a wordList, return a new wordList
+# containing only words that dont have the given letter
+def wordsWithoutLetter(letter, wordList):
+  ret = []
+  for word in wordList:
+    if letter not in word:
+      ret.append(word)
+  return ret
+  
+
+  
+# Given a letter and a wordList, return a new wordList 
+# containing only words with that letter
+def wordsWithLetter(letter, wordList):
+  ret = []
+  for word in wordList:
+    if letter in word:
+      ret.append(word)
+  return ret
+
+  
+#Given a letter and aposition, returns a new wordlist that satisifies
+def wordsWithLetterInPosition(letter, position, wordList):
+  ret = []
+  for word in wordList:
+    if word[position] == letter:
+      ret.append(word)
+  return ret
+  
+# 1 based
 #Frequency of letters based on position
 def nthLetterOfWords(n, wordList):
   letters = ""
@@ -57,7 +100,7 @@ def nthLetterOfWords(n, wordList):
 # Main Function
 # Takes in letters within the word, and letters not in the word
 # Outputs possible words remaining, and scores them based on letter frequency
-def bestGuess(goodLetters, badLetters):
+def bestGuess(positionLetters, requiredLetters, excludedLetters):
     wordList = {"added", 
             "agent", 
             "alpha", 
@@ -117,31 +160,29 @@ def bestGuess(goodLetters, badLetters):
             "vests", 
             "yield"}
 
-    store = letterScore(wordList)
+    # Reduce wordList to only words that give correct solution
+    wordList = possibleWords(positionLetters, requiredLetters, excludedLetters, wordList)
 
-    badLettersArray = list(badLetters)
-    goodLettersArray = list(goodLetters)
-
-    badFlag = 0
+    # Generate Scores based on reduced word list
+    scores = letterScore(wordList)
 
     res = {}
-
     for i in wordList:
-        badFlag = 0
-        while badFlag == 0:
-            for goodLetter in goodLettersArray:
-                if goodLetter not in i:
-                    badFlag = 1
-            for badLetter in badLettersArray:
-                if badLetter in i:
-                    badFlag = 1
-            if badFlag == 0:
-                badFlag = 1
-                res[i] = wordScore(i,store)
+      res[i] = wordScore(i,scores)
+      
     res = dict(sorted(res.items(),key=lambda item:item[1], reverse=True))
+    
     for key in res:
         print(f'{key} - Score: {res[key]}')
-bestGuess("e","rats")
+
+
+
+
+postition = "     "
+goodLetters = ""
+badLetters = ""
+
+bestGuess("     ", "rts", "ae")
 wordList = {"added", 
             "agent", 
             "alpha", 
