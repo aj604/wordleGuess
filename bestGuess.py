@@ -159,6 +159,12 @@ def bestGuess(positionLetters, requiredLetters, excludedLetters):
             "value", 
             "vests", 
             "yield"}
+    if len(positionLetters) != 5:
+      if positionLetters == "":
+        positionLetters = "     "
+      else:
+        while len(positionLetters) < 5:
+          positionLetters += " "
 
     # Reduce wordList to only words that give correct solution
     wordList = possibleWords(positionLetters, requiredLetters, excludedLetters, wordList)
@@ -172,18 +178,19 @@ def bestGuess(positionLetters, requiredLetters, excludedLetters):
       
     res = dict(sorted(res.items(),key=lambda item:item[1], reverse=True))
     
-    for key in res:
-        print(f'{key} - Score: {res[key]}')
+    #for key in res:
+        #print(f'{key} - Score: {res[key]}')
+  
+    return res
 
 
 
 
-postition = "     "
-goodLetters = ""
-badLetters = ""
+#postition = "     "
+#goodLetters = ""
+#badLetters = ""
 
-bestGuess("     ", "rts", "ae")
-
+#bestGuess("     ", "rts", "ae")
 #print(wordScore("sssss", letterScore(wordList)))
 #print(letterScore(wordList))
 
