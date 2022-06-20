@@ -45,7 +45,7 @@ def possibleWords(positionLetters, requiredLetters, excludedLetters, wordList):
 
   # Position Letter Loop
   for i in range(5):
-    if positionLetters[i] != ' ':
+    if positionLetters[i] != '_':
       wordList = wordsWithLetterInPosition(positionLetters[i], i, wordList)
 
   # Required Letter Loop
@@ -161,10 +161,10 @@ def bestGuess(positionLetters, requiredLetters, excludedLetters):
             "yield"}
     if len(positionLetters) != 5:
       if positionLetters == "":
-        positionLetters = "     "
+        positionLetters = "_____"
       else:
         while len(positionLetters) < 5:
-          positionLetters += " "
+          positionLetters += "_"
 
     # Reduce wordList to only words that give correct solution
     wordList = possibleWords(positionLetters, requiredLetters, excludedLetters, wordList)
