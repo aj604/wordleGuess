@@ -79,6 +79,8 @@ class Wordle:
     self.gameWon = False
     self.guesses = 0
     self.guessHistory = []
+    self.yellowHistory = []
+    self.badHistory = []
     self.showHints = showHints
 
   #Internal Word Guessing Function
@@ -88,27 +90,30 @@ class Wordle:
     
     if word == self.target:
       self.gameWon = True
-      print(f'You Won! {word} was the target word!{os.linesep}It took you {self.guesses} guesses!')
+      return
     
     else:
       res = wordleGuess(word, self.target)
+      self.yellowHistory.append(res["yellowLetters"])
+      self.badHistory.append(res["badLetters"])
+
       greenLetterList = list(self.greenLetters)
       
       for i in range(5): 
         if res["greenLetters"][i] != "_":
           greenLetterList[i] = res["greenLetters"][i]
       self.greenLetters = "".join(greenLetterList)
-      
+
       for letter in res["yellowLetters"]:
-        if letter not in self.yellowLetters:
+        if letter not in self.yellowLetters and letter != "_":
           self.yellowLetters += letter
       
       for letter in res["badLetters"]:
-        if letter not in self.badLetters:
+        if letter not in self.badLetters and letter != "_":
             self.badLetters += letter
 
       print("Nice Guess!\n")
-      print(f'Green Letters  : {self.greenLetters}{os.linesep}Yellow Letters : {self.yellowLetters}{os.linesep}Bad Letters    : {self.badLetters}{os.linesep}')
+      print(f'Green Letters  : {self.greenLetters}{os.linesep}Yellow Letters : {self.yellowHistory[self.guesses-1]}{os.linesep}Bad Letters    : {self.badLetters}{os.linesep}')
       if self.showHints:
         self.printHints()
 

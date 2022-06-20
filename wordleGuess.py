@@ -8,9 +8,14 @@ def wordleGuess(guess, target):
       ret["greenLetters"] += guess[i]
     else:
       ret["greenLetters"] += "_"
-  for letter in guess:
-    if letter in target:
-      ret["yellowLetters"] += letter
+  for i in range(5):
+    if guess[i] in target:
+      ret["badLetters"] += "_"
+      if guess[i] == target[i]:
+        ret["yellowLetters"] += "_"
+      else:
+        ret["yellowLetters"] += guess[i]
     else:
-      ret["badLetters"] += letter
+      ret["badLetters"] += guess[i]
+      ret["yellowLetters"] += "_"
   return ret
