@@ -128,7 +128,7 @@ class Wordle:
   def reset(self):
     self.guesses = 0
     self.gameWon = False
-    self.target = WORD_LIST[randrange(len(WORD_LIST))]
+    self.target = "draft"#WORD_LIST[randrange(len(WORD_LIST))]
     self.greenLetters = "_____"
     self.yellowLetters = ""
     self.badLetters = ""
@@ -151,7 +151,8 @@ class Wordle:
   def printHints(self):
     hints = bestGuess(self.greenLetters, 
                           self.yellowLetters, 
-                          self.badLetters)
+                          self.badLetters,
+                          self.yellowHistory)
     print("Word Scores")
     print("______________")
     for word in hints:

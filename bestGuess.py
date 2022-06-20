@@ -41,9 +41,10 @@ def maxLetterScoreRanked(letter, freq):
 # Pre: Letters with required position, required letters, and excluded letters
 # Post: Possible words
 # Dont forget the case where position letters can occur multiple times
-def possibleWords(positionLetters, requiredLetters, excludedLetters, wordList):
+def possibleWords(positionLetters, requiredLetters, excludedLetters, yellowHistory, wordList):
 
   # Position Letter Loop
+
   for i in range(5):
     if positionLetters[i] != '_':
       wordList = wordsWithLetterInPosition(positionLetters[i], i, wordList)
@@ -55,8 +56,15 @@ def possibleWords(positionLetters, requiredLetters, excludedLetters, wordList):
   # Excluded Letter Loop
   for letter in excludedLetters:
     wordList = wordsWithoutLetter(letter, wordList)
-  
+
+  # Letter Not in Position Loop
+  for yellowWord in yellowHistory:
+    for i in range(5):
+      if yellowWord[i] != "_":
+        wordList = wordsWithoutLetterInPosition(yellowWord[i], i, wordList)
   return wordList
+
+
 # Given a letter and a wordList, return a new wordList
 # containing only words that dont have the given letter
 def wordsWithoutLetter(letter, wordList):
@@ -65,7 +73,16 @@ def wordsWithoutLetter(letter, wordList):
     if letter not in word:
       ret.append(word)
   return ret
+
   
+# Given a letter, a position and a wordlist, return a new wordlist
+# in which no words have that letter in that position
+def wordsWithoutLetterInPosition(letter, position, wordList):
+  ret = []
+  for word in wordList:
+    if word[position] != letter:
+      ret.append(word)
+  return ret
 
   
 # Given a letter and a wordList, return a new wordList 
@@ -100,7 +117,7 @@ def nthLetterOfWords(n, wordList):
 # Main Function
 # Takes in letters within the word, and letters not in the word
 # Outputs possible words remaining, and scores them based on letter frequency
-def bestGuess(positionLetters, requiredLetters, excludedLetters):
+def bestGuess(positionLetters, requiredLetters, excludedLetters, yellowHistory):
     wordList = {"added", 
             "agent", 
             "alpha", 
@@ -167,7 +184,7 @@ def bestGuess(positionLetters, requiredLetters, excludedLetters):
           positionLetters += "_"
 
     # Reduce wordList to only words that give correct solution
-    wordList = possibleWords(positionLetters, requiredLetters, excludedLetters, wordList)
+    wordList = possibleWords(positionLetters, requiredLetters, excludedLetters, yellowHistory, wordList)
 
     # Generate Scores based on reduced word list
     scores = letterScore(wordList)
