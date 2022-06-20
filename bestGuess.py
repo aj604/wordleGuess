@@ -44,7 +44,6 @@ def maxLetterScoreRanked(letter, freq):
 def possibleWords(positionLetters, requiredLetters, excludedLetters, yellowHistory, wordList):
 
   # Position Letter Loop
-
   for i in range(5):
     if positionLetters[i] != '_':
       wordList = wordsWithLetterInPosition(positionLetters[i], i, wordList)

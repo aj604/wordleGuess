@@ -73,16 +73,36 @@ class GameState(Enum):
 class Wordle:
   def __init__(self, showHints):
     self.target = WORD_LIST[randrange(len(WORD_LIST))]
+    
+    self.greenLetters = "_____"
+    self.yellowLetters = ""
+    self.badLetters = ""
+    
+    self.gameWon = False
+    self.guesses = 0
+    self.streak = 0
+    
+    self.guessHistory = []
+    self.greenHistory = []
+    self.yellowHistory = []
+    self.badHistory = []
+    
+    self.showHints = showHints
+
+  #Function to reset game, and start over
+  def reset(self):
+    self.target = WORD_LIST[randrange(len(WORD_LIST))]
     self.greenLetters = "_____"
     self.yellowLetters = ""
     self.badLetters = ""
     self.gameWon = False
     self.guesses = 0
+    self.streak += 1
     self.guessHistory = []
+    self.greenHistory = []
     self.yellowHistory = []
     self.badHistory = []
-    self.showHints = showHints
-
+    
   #Internal Word Guessing Function
   def guessWord(self, word):
     self.guessHistory.append(word)
@@ -94,11 +114,13 @@ class Wordle:
     
     else:
       res = wordleGuess(word, self.target)
+      
+      # Track Color History
+      self.greenHistory.append(res["greenLetters"])
       self.yellowHistory.append(res["yellowLetters"])
       self.badHistory.append(res["badLetters"])
 
       greenLetterList = list(self.greenLetters)
-      
       for i in range(5): 
         if res["greenLetters"][i] != "_":
           greenLetterList[i] = res["greenLetters"][i]
@@ -113,10 +135,18 @@ class Wordle:
             self.badLetters += letter
 
       print("Nice Guess!\n")
-      print(f'Green Letters  : {self.greenLetters}{os.linesep}Yellow Letters : {self.yellowHistory[self.guesses-1]}{os.linesep}Bad Letters    : {self.badLetters}{os.linesep}')
+      self.printResults()
       if self.showHints:
         self.printHints()
-
+        
+  # Helper Function to Print Results
+  def printResults(self):
+    print(f'Green Letters  : {self.greenHistory[self.guesses-1]}')
+    print(f'Yellow Letters : {self.yellowHistory[self.guesses-1]}')
+    print(f'Bad Letters    : {self.badLetters}{os.linesep}')
+    print(f'Overall Green  : {self.greenLetters}{os.linesep}')
+    
+  #Handles prompting user for their guess, and calls the guess function
   def promptGuess(self):
     guess = input(f'Enter Guess #{self.guesses+1}: ')
     print()
@@ -124,16 +154,8 @@ class Wordle:
       print("oops! your guess has to be 5 letters long!")
       guess = input(f'Enter Guess #{self.guesses+1}: ')
     self.guessWord(guess)
-
-  def reset(self):
-    self.guesses = 0
-    self.gameWon = False
-    self.target = "draft"#WORD_LIST[randrange(len(WORD_LIST))]
-    self.greenLetters = "_____"
-    self.yellowLetters = ""
-    self.badLetters = ""
-    self.guessHistory = []
-
+    
+  #Handles End of Game Procedures
   def endGame(self, gameState):
     if gameState == GameState.Win:
       print(f'Congrats! You Won! {self.target} was the target word!{os.linesep}It took you {self.guesses} guesses!')
@@ -147,13 +169,14 @@ class Wordle:
     else:
       print("Goodbye")
       return True
-
+      
+  #Formatted print for Hints
   def printHints(self):
     hints = bestGuess(self.greenLetters, 
                           self.yellowLetters, 
                           self.badLetters,
                           self.yellowHistory)
-    print("Word Scores")
+    print("Word Scores:")
     print("______________")
     for word in hints:
       print(f'| {word} | {hints[word]} |')
