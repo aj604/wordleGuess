@@ -182,13 +182,3 @@ def bestGuess(positionLetters, requiredLetters, excludedLetters):
     return res
 
 
-
-
-#postition = "     "
-#goodLetters = ""
-#badLetters = ""
-
-#bestGuess("     ", "rts", "ae")
-#print(wordScore("sssss", letterScore(wordList)))
-#print(letterScore(wordList))
-

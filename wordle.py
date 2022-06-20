@@ -1,4 +1,6 @@
+from re import match
 from random import randrange
+from enum import Enum
 from wordleGuess import wordleGuess
 from bestGuess import bestGuess
 import os
@@ -62,6 +64,13 @@ WORD_LIST = ["added",
             "vests", 
             "yield"]
 
+#Enum for GameState
+class GameState(Enum):
+  Win = 1
+  OutOfTurns = 2
+
+
+#Wordle Game Handler
 class Wordle:
   def __init__(self, showHints):
     self.target = WORD_LIST[randrange(len(WORD_LIST))]
@@ -70,32 +79,50 @@ class Wordle:
     self.badLetters = ""
     self.gameWon = False
     self.guesses = 0
+    self.guessHistory = []
     self.showHints = showHints
 
   def guessWord(self, word):
+    self.guessHistory.append(word)
     self.guesses += 1
+    
     if word == self.target:
       self.gameWon = True
       print(f'You Won! {word} was the target word!{os.linesep}It took you {self.guesses} guesses!')
+    
     else:
       res = wordleGuess(word, self.target)
       greenLetterList = list(self.greenLetters)
+      
       for i in range(5): 
         if res["greenLetters"][i] != "_":
           greenLetterList[i] = res["greenLetters"][i]
       self.greenLetters = "".join(greenLetterList)
+      
       for letter in res["yellowLetters"]:
         if letter not in self.yellowLetters:
           self.yellowLetters += letter
+      
       for letter in res["badLetters"]:
         if letter not in self.badLetters:
             self.badLetters += letter
+      
       print(f'Nice Guess!{os.linesep}Green Letters : {self.greenLetters}{os.linesep}Yellow Letters   : {self.yellowLetters}{os.linesep}Bad Letters   : {self.badLetters}{os.linesep}')
       if self.showHints:
-        print(bestGuess(self.greenLetters, self.yellowLetters, self.badLetters))
+        hints = bestGuess(self.greenLetters, 
+                          self.yellowLetters, 
+                          self.badLetters)
+        print("Word Scores")
+        print("______________")
+        for word in hints:
+          print(f'| {word} | {hints[word]} |')
+        print("______________\n")
 
   def promptGuess(self):
-    guess = input("Enter Your Guess: ")
+    guess = input(f'Enter Guess #{self.guesses+1}: ')
+    while len(guess) != 5:
+      print("oops! your guess has to be 5 letters long!")
+      guess = input(f'Enter Guess #{self.guesses+1}: ')
     self.guessWord(guess)
 
   def reset(self):
@@ -105,3 +132,18 @@ class Wordle:
     self.greenLetters = "_____"
     self.yellowLetters = ""
     self.badLetters = ""
+    self.guessHistory = []
+
+  def endGame(self, gameState):
+    if gameState == GameState.Win:
+      print("Congrats! You Won!")
+    if gameState == GameState.OutOfTurns:
+      print("You ran out of guesses, Maybe next time...")
+        
+    resp = input("Do you want to play again? (Y or N): ")
+    if resp.lower() == "y":
+      self.reset()
+      return False
+    else:
+      print("Goodbye")
+      return True

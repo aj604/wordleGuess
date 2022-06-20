@@ -1,4 +1,4 @@
-from wordle import Wordle
+from wordle import Wordle, GameState
 def App():
   print("Welcome to NB Wordle!\n")
   hintsChoice = input("Do you want hints? ;) ")
@@ -7,14 +7,9 @@ def App():
 
   while True:
     game.promptGuess()
-    if(game.gameWon):
-      print("Thanks for Playing\n")
-      resp = input("Do you want to play again? (Y or N): ")
-      if resp.lower() == "y":
-        game.reset()
-      else:
-        print("Goodbye")
-        break
-
+    if game.gameWon and game.endGame(GameState.Win):
+      break
+    if game.guesses >= 6 and game.endGame(GameState.OutOfTurns):
+      break
 App()
   
