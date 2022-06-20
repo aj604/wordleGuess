@@ -1,7 +1,9 @@
 from random import randrange
 from wordleGuess import wordleGuess
+from bestGuess import bestGuess
+import os
 
-WORD_LIST = {"added", 
+WORD_LIST = ["added", 
             "agent", 
             "alpha", 
             "asset", 
@@ -58,12 +60,12 @@ WORD_LIST = {"added",
             "trust", 
             "value", 
             "vests", 
-            "yield"}
+            "yield"]
 
 class Wordle:
   def __init__(self):
     self.target = WORD_LIST[randrange(len(WORD_LIST))]
-    self.greenLetters = ""
+    self.greenLetters = "_____"
     self.yellowLetters = ""
     self.badLetters = ""
     self.gameWon = False
@@ -73,20 +75,31 @@ class Wordle:
     self.guesses += 1
     if word == self.target:
       self.gameWon = True
-      print(f'You Won! {word} was the target word! 
-            It took you {self.guesses} guesses!')
+      print(f'You Won! {word} was the target word!{os.linesep}It took you {self.guesses} guesses!')
     else:
       res = wordleGuess(word, self.target)
-      self.greenLetters = res["greenLetters"]
-      self.yellowLetters = res["yellowLetters"]
-      self.badLetters = res["badLetters"]
-      print(f'Nice Guess!
-            Green Letters : {self.greenLetters}
-            Red Letters   : {self.redLetters}
-            Bad Letters   : {self.badLetters}
-            ')
+      greenLetterList = list(self.greenLetters)
+      for i in range(5): 
+        if res["greenLetters"][i] != "_":
+          greenLetterList[i] = res["greenLetters"][i]
+      self.greenLetters = "".join(greenLetterList)
+      for letter in res["yellowLetters"]:
+        if letter not in self.yellowLetters:
+          self.yellowLetters += letter
+      for letter in res["badLetters"]:
+        if letter not in self.badLetters:
+            self.badLetters += letter
+      print(f'Nice Guess!{os.linesep}Green Letters : {self.greenLetters}{os.linesep}Yellow Letters   : {self.yellowLetters}{os.linesep}Bad Letters   : {self.badLetters}{os.linesep}')
+      print(bestGuess(self.greenLetters, self.yellowLetters, self.badLetters))
 
-  def promptGuess():
-    guess = input("Enter Your Guess:")
-    guessWord(guess)
-    
+  def promptGuess(self):
+    guess = input("Enter Your Guess: ")
+    self.guessWord(guess)
+
+  def reset(self):
+    self.guesses = 0
+    self.gameWon = False
+    self.target = WORD_LIST[randrange(len(WORD_LIST))]
+    self.greenLetters = "_____"
+    self.yellowLetters = ""
+    self.badLetters = ""

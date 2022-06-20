@@ -75,7 +75,3 @@ def wordleGuess(guess, target):
     else:
       ret["badLetters"] += letter
   return ret
-
-  
-print(wordleGuess("aaaye", "abcde"))
-print(bestGuess("_a___", "", ""))
