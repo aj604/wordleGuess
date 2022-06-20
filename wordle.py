@@ -1,4 +1,3 @@
-from re import match
 from random import randrange
 from enum import Enum
 from wordleGuess import wordleGuess
