@@ -82,6 +82,7 @@ class Wordle:
     self.guessHistory = []
     self.showHints = showHints
 
+  #Internal Word Guessing Function
   def guessWord(self, word):
     self.guessHistory.append(word)
     self.guesses += 1
@@ -106,20 +107,15 @@ class Wordle:
       for letter in res["badLetters"]:
         if letter not in self.badLetters:
             self.badLetters += letter
-      
-      print(f'Nice Guess!{os.linesep}Green Letters : {self.greenLetters}{os.linesep}Yellow Letters   : {self.yellowLetters}{os.linesep}Bad Letters   : {self.badLetters}{os.linesep}')
+
+      print("Nice Guess!\n")
+      print(f'Green Letters  : {self.greenLetters}{os.linesep}Yellow Letters : {self.yellowLetters}{os.linesep}Bad Letters    : {self.badLetters}{os.linesep}')
       if self.showHints:
-        hints = bestGuess(self.greenLetters, 
-                          self.yellowLetters, 
-                          self.badLetters)
-        print("Word Scores")
-        print("______________")
-        for word in hints:
-          print(f'| {word} | {hints[word]} |')
-        print("______________\n")
+        self.printHints()
 
   def promptGuess(self):
     guess = input(f'Enter Guess #{self.guesses+1}: ')
+    print()
     while len(guess) != 5:
       print("oops! your guess has to be 5 letters long!")
       guess = input(f'Enter Guess #{self.guesses+1}: ')
@@ -136,7 +132,7 @@ class Wordle:
 
   def endGame(self, gameState):
     if gameState == GameState.Win:
-      print("Congrats! You Won!")
+      print(f'Congrats! You Won! {self.target} was the target word!{os.linesep}It took you {self.guesses} guesses!')
     if gameState == GameState.OutOfTurns:
       print("You ran out of guesses, Maybe next time...")
         
@@ -147,3 +143,13 @@ class Wordle:
     else:
       print("Goodbye")
       return True
+
+  def printHints(self):
+    hints = bestGuess(self.greenLetters, 
+                          self.yellowLetters, 
+                          self.badLetters)
+    print("Word Scores")
+    print("______________")
+    for word in hints:
+      print(f'| {word} | {hints[word]} |')
+    print("______________\n")
