@@ -63,13 +63,14 @@ WORD_LIST = ["added",
             "yield"]
 
 class Wordle:
-  def __init__(self):
+  def __init__(self, showHints):
     self.target = WORD_LIST[randrange(len(WORD_LIST))]
     self.greenLetters = "_____"
     self.yellowLetters = ""
     self.badLetters = ""
     self.gameWon = False
     self.guesses = 0
+    self.showHints = showHints
 
   def guessWord(self, word):
     self.guesses += 1
@@ -90,7 +91,8 @@ class Wordle:
         if letter not in self.badLetters:
             self.badLetters += letter
       print(f'Nice Guess!{os.linesep}Green Letters : {self.greenLetters}{os.linesep}Yellow Letters   : {self.yellowLetters}{os.linesep}Bad Letters   : {self.badLetters}{os.linesep}')
-      print(bestGuess(self.greenLetters, self.yellowLetters, self.badLetters))
+      if self.showHints:
+        print(bestGuess(self.greenLetters, self.yellowLetters, self.badLetters))
 
   def promptGuess(self):
     guess = input("Enter Your Guess: ")
