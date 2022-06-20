@@ -6,6 +6,17 @@ app = Flask(__name__)
 @app.route('/')
 def index():
   game = Wordle(False)
-  return render_template('index.html', game=game)
+  game.guessWord("rates")
+  
+  game.guessWord("rates")
+  
+  game.guessWord("rates")
+  
+  game.guessWord("rates")
+  
+  game.guessWord("rates")
+  
+  game.guessWord("rates")
+  return render_template('index.html', game = game)
 
 app.run()
