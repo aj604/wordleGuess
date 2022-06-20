@@ -68,7 +68,6 @@ class GameState(Enum):
   Win = 1
   OutOfTurns = 2
 
-
 #Wordle Game Handler
 class Wordle:
   def __init__(self, showHints):

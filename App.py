@@ -1,4 +1,6 @@
 from wordle import Wordle, GameState
+
+#CLI Entry Point
 def App():
   print("Welcome to NB Wordle!\n")
   hintsChoice = input("Do you want hints? ;) ")
@@ -11,5 +13,5 @@ def App():
       break
     if game.guesses >= 6 and game.endGame(GameState.OutOfTurns):
       break
+
 App()
-  
