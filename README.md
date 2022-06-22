@@ -30,4 +30,13 @@ Run *Python CLIGuess.py*
   
 
 
-##TODO: UI
+## TODO: 
+* Resolve target = ENTRY
+  * 0, __t__, r__e_, as
+* UI
+* Input checking
+  * swap " " with "_"
+  * valid word list (After File)
+  * letters only
+* Word List to File
+
