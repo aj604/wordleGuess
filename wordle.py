@@ -1,5 +1,7 @@
+from ctypes.wintypes import WORD
 from random import randrange
 from enum import Enum
+from functools import singledispatchmethod
 from wordleGuess import wordleGuess
 from bestGuess import bestGuess
 import os
@@ -70,7 +72,8 @@ class GameState(Enum):
 
 #Wordle Game Handler
 class Wordle:
-  def __init__(self, showHints):
+  @singledispatchmethod
+  def __init__(self, arg):
     self.target = WORD_LIST[randrange(len(WORD_LIST))]
     
     self.greenLetters = "_____"
@@ -86,7 +89,67 @@ class Wordle:
     self.yellowHistory = []
     self.badHistory = []
     
-    self.showHints = showHints
+    self.showHints = False
+
+
+  @__init__.register
+  def _(self, id: int):
+    self.target = WORD_LIST[id if id < len(WORD_LIST) else len(WORD_LIST)-1]
+    
+    self.greenLetters = "_____"
+    self.yellowLetters = ""
+    self.badLetters = ""
+    
+    self.gameWon = False
+    self.guesses = 0
+    self.streak = 0
+    
+    self.guessHistory = []
+    self.greenHistory = []
+    self.yellowHistory = []
+    self.badHistory = []
+    
+    self.showHints = False
+
+
+  @__init__.register
+  def _(self, target: str):
+    self.target = target
+    
+    self.greenLetters = "_____"
+    self.yellowLetters = ""
+    self.badLetters = ""
+    
+    self.gameWon = False
+    self.guesses = 0
+    self.streak = 0
+    
+    self.guessHistory = []
+    self.greenHistory = []
+    self.yellowHistory = []
+    self.badHistory = []
+    
+    self.showHints = False
+
+
+  @__init__.register
+  def _(self, hintsFlag: bool):
+    self.target = str
+    
+    self.greenLetters = "_____"
+    self.yellowLetters = ""
+    self.badLetters = ""
+    
+    self.gameWon = False
+    self.guesses = 0
+    self.streak = 0
+    
+    self.guessHistory = []
+    self.greenHistory = []
+    self.yellowHistory = []
+    self.badHistory = []
+    
+    self.showHints = hintsFlag
 
   #Function to reset game, and start over
   def reset(self):
@@ -180,3 +243,12 @@ class Wordle:
     for word in hints:
       print(f'| {word} | {hints[word]} |')
     print("______________\n")
+
+
+test = Wordle("Test")
+print(test.target)
+testStr = Wordle(9999999999999999999999999999999999999)
+print(testStr.target)
+testBool = Wordle(True)
+print(testBool.showHints)
+testAny = Wordle(1.1)
