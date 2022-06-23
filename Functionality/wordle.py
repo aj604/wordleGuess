@@ -2,8 +2,8 @@ from ctypes.wintypes import WORD
 from random import randrange
 from enum import Enum
 from functools import singledispatchmethod
-from wordleGuess import wordleGuess
-from bestGuess import bestGuess
+from Functionality.wordleGuess import wordleGuess
+from Functionality.bestGuess import bestGuess
 import os
 
 WORD_LIST = ["added", 
@@ -245,10 +245,4 @@ class Wordle:
     print("______________\n")
 
 
-test = Wordle("Test")
-print(test.target)
-testStr = Wordle(9999999999999999999999999999999999999)
-print(testStr.target)
-testBool = Wordle(True)
-print(testBool.showHints)
-testAny = Wordle(1.1)
+

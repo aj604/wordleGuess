@@ -1,4 +1,4 @@
-from wordle import Wordle, GameState
+from Functionality.wordle import Wordle, GameState
 
 #CLI Entry Point
 def App():

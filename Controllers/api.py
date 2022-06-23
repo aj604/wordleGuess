@@ -1,6 +1,6 @@
 import json
 from flask import Flask, request
-from bestGuess import bestGuess
+from Functionality.bestGuess import bestGuess
 
 app = Flask(__name__)
 @app.route('/', methods=['POST'])

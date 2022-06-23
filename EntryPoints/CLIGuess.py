@@ -1,4 +1,4 @@
-from bestGuess import bestGuess
+from Functionality.bestGuess import bestGuess
 # CLI Entry Point to use only the bestGuess function
 def App():
   isSolved = False
