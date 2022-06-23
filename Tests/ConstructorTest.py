@@ -10,10 +10,10 @@ class TestConstructors(unittest.TestCase):
         self.assertEqual(Wordle(0).target, "added")
 
     def test_bool(self):
-        self.assertEqual(Wordle(False).showHints)
+        self.assertTrue(Wordle(True).showHints)
 
     def test_any(self):
-        self.assertFalse(Wordle().showHints)
+        self.assertFalse(Wordle(1.1).showHints)
 
     def test_OutOfRangeID(self):
         self.assertEqual(Wordle(999).target, "yield")
