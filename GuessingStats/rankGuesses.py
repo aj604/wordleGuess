@@ -42,6 +42,7 @@ def rankGuesses():
     
         #Loop through possible targets
         for targetWord in POSSIBLE_GUESSES: 
+            currentWordList = POSSIBLE_GUESSES
             gameStart = datetime.now()
             game.setWord(targetWord)
             game.guessWord(firstGuess)
@@ -51,17 +52,15 @@ def rankGuesses():
                 if game.guesses == 6:
                     game.guesses += 5
                     break
-                bestGuesses = bestGuess(game.greenLetters, game.yellowLetters, game.badLetters, game.yellowHistory)
-                nextGuess = next(iter(bestGuesses))
+                [nextGuess, currentWordList] = bestSingleGuessWordList(game.greenLetters, game.yellowLetters, game.badLetters, game.yellowHistory, currentWordList)
+                #nextGuess = next(iter(bestGuesses))
                 game.guessWord(nextGuess)
             
             #Add guesses required to get to target to score. Normalize later based on target len
             scores[firstGuess] += game.guesses
             gamesPlayed += 1
-            maxGuess = max(maxGuess, game.guesses)
-            if gamesPlayed % 100 == 0:
-                print(f'Single game took {(datetime.now()-gameStart).total_seconds()}s. Total Time: {(datetime.now() - funcStart).total_seconds()}s. {gamesPlayed} games played')
-                print(f'Max Guess: {maxGuess}')
+            if gamesPlayed % 5000 == 0:
+                print(f'{gamesPlayed} games played. Total Time: {(datetime.now() - funcStart)}')
 
     #Normalize scores to average guesses to target            
     avgGuess = 0.0
@@ -77,7 +76,7 @@ def rankGuesses():
 
     print(f'Average Guesses to Target: {round(avgGuess, 2)}')
     print("______________")
-    for word in islice(scores, 25):
+    for word in islice(scores, 150):
       print(f'| {word} | {scores[word]:.2f} |')
     print("______________\n")
 
