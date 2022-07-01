@@ -11,10 +11,12 @@ a = str(path.parent.absolute())
 
 sys.path.append(a)
 
+from itertools import islice
+from datetime import datetime, timedelta
 
 from Functionality.wordle import *
 from Functionality.bestGuess import *
-from StaticData.StaticData import WORD_LIST
+from StaticData.StaticData import WORD_LIST, POSSIBLE_GUESSES
 #endregion
 
 
@@ -23,12 +25,18 @@ def rankGuesses():
     scores = {}
     nextGuess = ""
     targetLen = len(WORD_LIST)
+    possibleLen = len(POSSIBLE_GUESSES)
+    funcStart = datetime.now()
+    wordsGuessed = 0
 
     
     #Loop through possible first Guesses
-    for firstGuess in WORD_LIST: #Update Later to use possible guesses instead of target list
+    for firstGuess in POSSIBLE_GUESSES: #Update Later to use possible guesses instead of target list
         #initialize word score to 0
         scores[firstGuess] = 0
+        wordsGuessed += 1
+        if wordsGuessed % 500 == 0:
+            print(f'Processing... {possibleLen - wordsGuessed} words remain')
     
         #Loop through possible targets
         for targetWord in WORD_LIST: 
@@ -54,11 +62,16 @@ def rankGuesses():
     
     scores = dict(sorted(scores.items(),key=lambda item:item[1]))
 
-    avgGuess /= targetLen
+    avgGuess /= possibleLen
+    
+
     print(f'Average Guesses to Target: {round(avgGuess, 2)}')
     print("______________")
-    for word in scores:
+    for word in islice(scores, 25):
       print(f'| {word} | {scores[word]:.2f} |')
     print("______________\n")
+
+    funcTime = datetime.now() - funcStart
+    print(f'Function took {funcTime.total_seconds()}s')
 
 rankGuesses()
