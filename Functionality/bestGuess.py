@@ -1,4 +1,5 @@
 #region IMPORT
+from ctypes.wintypes import WORD
 import sys
 import os
 
@@ -147,7 +148,7 @@ def bestGuess(positionLetters, requiredLetters, excludedLetters, yellowHistory):
     normalizeLetters(positionLetters)
 
     # Reduce wordList to only words that give correct solution
-    wordList = possibleWords(positionLetters, requiredLetters, excludedLetters, yellowHistory, POSSIBLE_GUESSES)
+    wordList = possibleWords(positionLetters, requiredLetters, excludedLetters, yellowHistory, WORD_LIST)
 
     # Generate Scores based on reduced word list
     scores = letterScore(wordList)
