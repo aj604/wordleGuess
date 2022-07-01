@@ -17,7 +17,7 @@ from enum import Enum
 from functools import singledispatchmethod
 from Functionality.wordleGuess import wordleGuess
 from Functionality.bestGuess import bestGuess
-from StaticData.StaticData import WORD_LIST
+from StaticData.StaticData import POSSIBLE_GUESSES, WORD_LIST
 import os
 #endregion
 
@@ -29,6 +29,7 @@ class GameState(Enum):
 
 #Wordle Game Handler
 class Wordle:
+
   @singledispatchmethod
   def __init__(self, arg):
     self.target = WORD_LIST[randrange(len(WORD_LIST))]
@@ -47,7 +48,7 @@ class Wordle:
     self.badHistory = []
     
     self.showHints = False
-
+  
 
   @__init__.register
   def _(self, id: int):
@@ -91,7 +92,7 @@ class Wordle:
 
   @__init__.register
   def _(self, hintsFlag: bool):
-    self.target = str
+    self.target = WORD_LIST[randrange(len(WORD_LIST))]
     
     self.greenLetters = "_____"
     self.yellowLetters = ""
@@ -129,6 +130,7 @@ class Wordle:
 
   #Internal Word Guessing Function
   def guessWord(self, word):
+
     self.guessHistory.append(word)
     self.guesses += 1
     
@@ -169,10 +171,11 @@ class Wordle:
   #Handles prompting user for their guess, and calls the guess function
   def promptGuess(self):
     guess = input(f'Enter Guess #{self.guesses+1}: ')
-    print()
-    while len(guess) != 5:
-      print("oops! your guess has to be 5 letters long!")
+    while guess not in POSSIBLE_GUESSES:
+      print(f'Sorry, {guess} is not a valid word')
       guess = input(f'Enter Guess #{self.guesses+1}: ')
+    print()
+
     self.guessWord(guess)
     print("Nice Guess!\n")
     self.printResults()
@@ -205,6 +208,3 @@ class Wordle:
     for word in hints:
       print(f'| {word} | {hints[word]} |')
     print("______________\n")
-
-
-

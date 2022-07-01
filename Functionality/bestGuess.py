@@ -12,7 +12,7 @@ a = str(path.parent.absolute())
 sys.path.append(a)
 
 from collections import Counter
-from StaticData.StaticData import WORD_LIST
+from StaticData.StaticData import POSSIBLE_GUESSES, WORD_LIST
 #endregion
 
 
@@ -141,7 +141,7 @@ def bestGuess(positionLetters, requiredLetters, excludedLetters, yellowHistory):
           positionLetters += "_"
 
     # Reduce wordList to only words that give correct solution
-    wordList = possibleWords(positionLetters, requiredLetters, excludedLetters, yellowHistory, WORD_LIST)
+    wordList = possibleWords(positionLetters, requiredLetters, excludedLetters, yellowHistory, POSSIBLE_GUESSES)
 
     # Generate Scores based on reduced word list
     scores = letterScore(wordList)

@@ -12,7 +12,7 @@ a = str(path.parent.absolute())
 sys.path.append(a)
 
 from itertools import islice
-from datetime import datetime, timedelta
+from datetime import datetime
 
 from Functionality.wordle import *
 from Functionality.bestGuess import *
@@ -24,10 +24,12 @@ def rankGuesses():
     game = Wordle(False)
     scores = {}
     nextGuess = ""
-    targetLen = len(WORD_LIST)
+    targetLen = len(POSSIBLE_GUESSES)
     possibleLen = len(POSSIBLE_GUESSES)
     funcStart = datetime.now()
     wordsGuessed = 0
+    gamesPlayed = 0
+    maxGuess = 0
 
     
     #Loop through possible first Guesses
@@ -35,23 +37,31 @@ def rankGuesses():
         #initialize word score to 0
         scores[firstGuess] = 0
         wordsGuessed += 1
-        if wordsGuessed % 500 == 0:
-            print(f'Processing... {possibleLen - wordsGuessed} words remain')
+        #if wordsGuessed % 5 == 0:
+        print(f'Processing... {possibleLen - wordsGuessed} words remain. Elapsed Time: {(datetime.now() - funcStart).total_seconds()}s')
     
         #Loop through possible targets
-        for targetWord in WORD_LIST: 
-            
+        for targetWord in POSSIBLE_GUESSES: 
+            gameStart = datetime.now()
             game.setWord(targetWord)
             game.guessWord(firstGuess)
             
             #Loop through best guesses until game is won
             while not game.gameWon:
+                if game.guesses == 6:
+                    game.guesses += 5
+                    break
                 bestGuesses = bestGuess(game.greenLetters, game.yellowLetters, game.badLetters, game.yellowHistory)
                 nextGuess = next(iter(bestGuesses))
                 game.guessWord(nextGuess)
             
             #Add guesses required to get to target to score. Normalize later based on target len
             scores[firstGuess] += game.guesses
+            gamesPlayed += 1
+            maxGuess = max(maxGuess, game.guesses)
+            if gamesPlayed % 100 == 0:
+                print(f'Single game took {(datetime.now()-gameStart).total_seconds()}s. Total Time: {(datetime.now() - funcStart).total_seconds()}s. {gamesPlayed} games played')
+                print(f'Max Guess: {maxGuess}')
 
     #Normalize scores to average guesses to target            
     avgGuess = 0.0
