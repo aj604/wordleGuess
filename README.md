@@ -27,6 +27,10 @@ Run *Python CLIGuess.py*
 
 ## CLIGuess.py
   CLI entry point for using only guessing functionality
+
+## rankGuesses.py
+  Ranks first guesses based on average guesses to target
+  
   
 
 
@@ -36,8 +40,8 @@ Run *Python CLIGuess.py*
 * UI
 * Input checking
   * swap " " with "_"
-  * valid word list (After File)
   * letters only
   * assert 5 str length 
 * Word List to File
+* Modular word length
 
