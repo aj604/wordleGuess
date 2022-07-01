@@ -19,3 +19,4 @@ def wordleGuess(guess, target):
       ret["badLetters"] += guess[i]
       ret["yellowLetters"] += "_"
   return ret
+

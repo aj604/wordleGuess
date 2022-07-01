@@ -12,7 +12,7 @@ a = str(path.parent.absolute())
 sys.path.append(a)
 
 from collections import Counter
-from StaticData.StaticData import WORD_LIST
+from StaticData.StaticData import POSSIBLE_GUESSES, WORD_LIST
 #endregion
 
 
@@ -63,12 +63,12 @@ def possibleWords(positionLetters, requiredLetters, excludedLetters, yellowHisto
   for i in range(5):
     if positionLetters[i] != '_':
       wordList = wordsWithLetterInPosition(positionLetters[i], i, wordList)
-
+ 
   # Required Letter Loop
   for letter in requiredLetters:
     wordList = wordsWithLetter(letter, wordList)
 
-  # Excluded Letter Loop
+ # Excluded Letter Loop
   for letter in excludedLetters:
     wordList = wordsWithoutLetter(letter, wordList)
 
@@ -125,7 +125,17 @@ def nthLetterOfWords(n, wordList):
   for word in wordList:
     letters += word[n]
   return Counter(letters)
-  
+
+
+def normalizeLetters(word):
+  if len(word) != 5:
+    if word == "":
+      word = "_____"
+    else:
+      while len(word) < 5:
+        word += "_"
+  return word
+
 
 
 
@@ -133,15 +143,11 @@ def nthLetterOfWords(n, wordList):
 # Takes in letters within the word, and letters not in the word
 # Outputs possible words remaining, and scores them based on letter frequency
 def bestGuess(positionLetters, requiredLetters, excludedLetters, yellowHistory):
-    if len(positionLetters) != 5:
-      if positionLetters == "":
-        positionLetters = "_____"
-      else:
-        while len(positionLetters) < 5:
-          positionLetters += "_"
+
+    normalizeLetters(positionLetters)
 
     # Reduce wordList to only words that give correct solution
-    wordList = possibleWords(positionLetters, requiredLetters, excludedLetters, yellowHistory, WORD_LIST)
+    wordList = possibleWords(positionLetters, requiredLetters, excludedLetters, yellowHistory, POSSIBLE_GUESSES)
 
     # Generate Scores based on reduced word list
     scores = letterScore(wordList)
@@ -154,5 +160,33 @@ def bestGuess(positionLetters, requiredLetters, excludedLetters, yellowHistory):
     res = dict(sorted(res.items(),key=lambda item:item[1], reverse=True))
   
     return res
+
+
+def bestSingleGuess(positionLetters, requiredLetters, excludedLetters, yellowHistory):
+  maxWord = ""
+  maxScore = 0
+  wordList = possibleWords(positionLetters, requiredLetters, excludedLetters, yellowHistory, POSSIBLE_GUESSES)
+  scores = letterScore(wordList)
+
+  for i in wordList:
+    score = wordScore(i, scores)
+    if score > maxScore:
+      maxScore = score
+      maxWord = i
+  return { maxWord: maxScore }
+
+def bestSingleGuessWordList(positionLetters, requiredLetters, excludedLetters, yellowHistory, wordList):
+  maxScore = 0
+  wordList = possibleWords(positionLetters, requiredLetters, excludedLetters, yellowHistory, wordList)
+  scores = letterScore(wordList)
+
+  for i in wordList:
+    score = wordScore(i, scores)
+    if score > maxScore:
+      maxScore = score
+      maxWord = i
+  return [maxWord, wordList]
+      
+
 
 
