@@ -1,7 +1,6 @@
 #region IMPORT
 import sys
 import os
-from turtle import pos
 
 myDir = os.getcwd()
 sys.path.append(myDir)
