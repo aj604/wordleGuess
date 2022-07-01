@@ -8,7 +8,6 @@ sys.path.append(myDir)
 from pathlib import Path
 path = Path(myDir)
 a = str(path.parent.absolute())
-
 sys.path.append(a)
 
 from itertools import islice
