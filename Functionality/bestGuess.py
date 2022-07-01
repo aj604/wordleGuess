@@ -1,4 +1,20 @@
+#region IMPORT
+import sys
+import os
+
+myDir = os.getcwd()
+sys.path.append(myDir)
+
+from pathlib import Path
+path = Path(myDir)
+a = str(path.parent.absolute())
+
+sys.path.append(a)
+
 from collections import Counter
+from StaticData.StaticData import WORD_LIST
+#endregion
+
 
 # Scoring Function
 # Takes in a list of dictionarys with corresponding scores by letter position
@@ -117,64 +133,6 @@ def nthLetterOfWords(n, wordList):
 # Takes in letters within the word, and letters not in the word
 # Outputs possible words remaining, and scores them based on letter frequency
 def bestGuess(positionLetters, requiredLetters, excludedLetters, yellowHistory):
-    wordList = {"added", 
-            "agent", 
-            "alpha", 
-            "asset", 
-            "audit", 
-            "basis", 
-            "board", 
-            "bonus", 
-            "brand", 
-            "check", 
-            "close", 
-            "count", 
-            "cover", 
-            "curve", 
-            "cycle", 
-            "debit", 
-            "delta", 
-            "draft", 
-            "entry", 
-            "equal", 
-            "error", 
-            "files", 
-            "first", 
-            "flows", 
-            "funds", 
-            "gross", 
-            "hedge", 
-            "index", 
-            "issue", 
-            "labor", 
-            "limit", 
-            "loans", 
-            "model", 
-            "money", 
-            "offer", 
-            "order", 
-            "point", 
-            "price", 
-            "rates", 
-            "ratio", 
-            "risks", 
-            "right", 
-            "round", 
-            "sales", 
-            "scale", 
-            "scope", 
-            "share", 
-            "sheet", 
-            "shock", 
-            "stock", 
-            "swaps", 
-            "taxes", 
-            "terms", 
-            "trade", 
-            "trust", 
-            "value", 
-            "vests", 
-            "yield"}
     if len(positionLetters) != 5:
       if positionLetters == "":
         positionLetters = "_____"
@@ -183,7 +141,7 @@ def bestGuess(positionLetters, requiredLetters, excludedLetters, yellowHistory):
           positionLetters += "_"
 
     # Reduce wordList to only words that give correct solution
-    wordList = possibleWords(positionLetters, requiredLetters, excludedLetters, yellowHistory, wordList)
+    wordList = possibleWords(positionLetters, requiredLetters, excludedLetters, yellowHistory, WORD_LIST)
 
     # Generate Scores based on reduced word list
     scores = letterScore(wordList)

@@ -38,5 +38,6 @@ Run *Python CLIGuess.py*
   * swap " " with "_"
   * valid word list (After File)
   * letters only
+  * assert 5 str length 
 * Word List to File
 

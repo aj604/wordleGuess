@@ -1,69 +1,26 @@
+#region IMPORT
+import sys
+import os
+
+myDir = os.getcwd()
+sys.path.append(myDir)
+
+from pathlib import Path
+path = Path(myDir)
+a = str(path.parent.absolute())
+
+sys.path.append(a)
+
 from ctypes.wintypes import WORD
 from random import randrange
 from enum import Enum
 from functools import singledispatchmethod
 from Functionality.wordleGuess import wordleGuess
 from Functionality.bestGuess import bestGuess
+from StaticData.StaticData import WORD_LIST
 import os
+#endregion
 
-WORD_LIST = ["added", 
-            "agent", 
-            "alpha", 
-            "asset", 
-            "audit", 
-            "basis", 
-            "board", 
-            "bonus", 
-            "brand", 
-            "check", 
-            "close", 
-            "count", 
-            "cover", 
-            "curve", 
-            "cycle", 
-            "debit", 
-            "delta", 
-            "draft", 
-            "entry", 
-            "equal", 
-            "error", 
-            "files", 
-            "first", 
-            "flows", 
-            "funds", 
-            "gross", 
-            "hedge", 
-            "index", 
-            "issue", 
-            "labor", 
-            "limit", 
-            "loans", 
-            "model", 
-            "money", 
-            "offer", 
-            "order", 
-            "point", 
-            "price", 
-            "rates", 
-            "ratio", 
-            "risks", 
-            "right", 
-            "round", 
-            "sales", 
-            "scale", 
-            "scope", 
-            "share", 
-            "sheet", 
-            "shock", 
-            "stock", 
-            "swaps", 
-            "taxes", 
-            "terms", 
-            "trade", 
-            "trust", 
-            "value", 
-            "vests", 
-            "yield"]
 
 #Enum for GameState
 class GameState(Enum):
@@ -94,7 +51,7 @@ class Wordle:
 
   @__init__.register
   def _(self, id: int):
-    self.target = WORD_LIST[id if id < len(WORD_LIST) else len(WORD_LIST)-1]
+    self.target = WORD_LIST[id if id < len(WORD_LIST) and id > 0 else 0]
     
     self.greenLetters = "_____"
     self.yellowLetters = ""
@@ -164,7 +121,12 @@ class Wordle:
     self.greenHistory = []
     self.yellowHistory = []
     self.badHistory = []
-    
+
+  #Sets the current word for guess stats
+  def setWord(self, word):
+    self.reset()
+    self.target = word
+
   #Internal Word Guessing Function
   def guessWord(self, word):
     self.guessHistory.append(word)
@@ -196,10 +158,6 @@ class Wordle:
         if letter not in self.badLetters and letter != "_":
             self.badLetters += letter
 
-      print("Nice Guess!\n")
-      self.printResults()
-      if self.showHints:
-        self.printHints()
         
   # Helper Function to Print Results
   def printResults(self):
@@ -216,6 +174,10 @@ class Wordle:
       print("oops! your guess has to be 5 letters long!")
       guess = input(f'Enter Guess #{self.guesses+1}: ')
     self.guessWord(guess)
+    print("Nice Guess!\n")
+    self.printResults()
+    if self.showHints:
+      self.printHints()
     
   #Handles End of Game Procedures
   def endGame(self, gameState):
