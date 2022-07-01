@@ -16,4 +16,4 @@ class TestConstructors(unittest.TestCase):
         self.assertFalse(Wordle(1.1).showHints)
 
     def test_OutOfRangeID(self):
-        self.assertEqual(Wordle(999).target, "yield")
+        self.assertEqual(Wordle(999).target, "added")

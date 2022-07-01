@@ -1,3 +1,17 @@
+#region IMPORTS
+import sys
+import os
+
+myDir = os.getcwd()
+sys.path.append(myDir)
+
+from pathlib import Path
+path = Path(myDir)
+a = str(path.parent.absolute())
+
+sys.path.append(a)
+#endregion
+
 from Functionality.bestGuess import bestGuess
 # CLI Entry Point to use only the bestGuess function
 def App():
