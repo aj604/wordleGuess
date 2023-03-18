@@ -127,6 +127,7 @@ class Wordle:
   def setWord(self, word):
     self.reset()
     self.target = word
+    self.
 
   #Internal Word Guessing Function
   def guessWord(self, word):
@@ -137,7 +138,6 @@ class Wordle:
     if word == self.target:
       self.gameWon = True
       return
-    
     else:
       res = wordleGuess(word, self.target)
       

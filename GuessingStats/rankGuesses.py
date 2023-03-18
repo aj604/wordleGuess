@@ -40,7 +40,7 @@ def rankGuesses():
         print(f'Processing... {possibleLen - wordsGuessed} words remain. Elapsed Time: {(datetime.now() - funcStart).total_seconds()}s')
     
         #Loop through possible targets
-        for targetWord in POSSIBLE_GUESSES: 
+        for targetWord in WORD_LIST: 
             currentWordList = POSSIBLE_GUESSES
             gameStart = datetime.now()
             game.setWord(targetWord)
